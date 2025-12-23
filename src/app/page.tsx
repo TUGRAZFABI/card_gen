@@ -5,11 +5,6 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'MyApp - Modern Landing Page',
-  description: 'A beautiful landing page built with Next.js',
-}
-
 export default function RootLayout({
   children,
 }: {

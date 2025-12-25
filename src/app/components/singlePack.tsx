@@ -14,6 +14,7 @@ interface entry
     max_amount : number;
     rarity : string;
     png_id : string;
+    price : number;
 }
 
 
@@ -23,12 +24,30 @@ function getImageUrl(png_id : string,type : string)
     return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.png`;
 }
 
+async function createCardInstance(card : any, owner_id : number)
+{
+    const onError = await supabase.from('card_instance').insert(
+        {
+            template_id : card.id,
+            owner_id : owner_id
+        }
+    ).select().single();
+
+
+    console.log("Create an card instance", owner_id, card.id);
+}
+
 
 export default function SinglePack()
 {
   const [isOpened, setterIsOpened] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>('');
-  const [CardID, setCardID] = useState<number>(0);
+  const [cardPrice, setCardPrice] = useState<number>(0);
+  
+  const [Card , setCard] = useState<any>();
+
+  const [coins, setCoins] = useState<number>(0);
+
   const [CardDataJson, setCardDataJson] = useState<any>();
 
 
@@ -38,6 +57,7 @@ export default function SinglePack()
     const mockPriceOfPack = 10;
 
     const {data : userData} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
+
     const currentCoins = userData?.coins || 0;
     const updatedCoins = currentCoins - mockPriceOfPack;
 
@@ -46,25 +66,35 @@ export default function SinglePack()
         //some pupup when time; 
         return;
     }
+    setCoins(updatedCoins);
 
     const  data = await supabase.from('card_template').select('*').eq('id', randomCardID).single();
-    
+    const Card = data.data as entry;
+    setCard(Card)
+    setCardPrice(Card.price);
     console.log(data);
-    const card = data.data as entry;
 
     const onError = await supabase.from('user_collection').update({coins: updatedCoins}).eq('id' , mockUserID)
 
 
-    setImageUrl(getImageUrl(card.png_id, card.class));
+    setImageUrl(getImageUrl(Card.png_id, Card.class));
     setCardDataJson(data.data);
-    setCardID(randomCardID);
     setterIsOpened(true);
   }
 
   const addToInventory = async () => {
       const mockUserID = 1;
       const onError = await supabase.from('user_collection').update({inventory: CardDataJson}).eq('id' , mockUserID)
+      createCardInstance(Card, mockUserID);
+      setterIsOpened(false);
   }
+
+  const quickSell = async () => {
+    const mockUserID = 1;    
+    const onError = await supabase.from('user_collection').update({coins: coins + cardPrice}).eq('id' , mockUserID)
+    setterIsOpened(false);
+  
+}
 
   if(!isOpened)
   {
@@ -89,7 +119,7 @@ export default function SinglePack()
         <div className='container'>
             <img
             src={imageUrl}
-            onClick={openPack}
+            onClick={addToInventory}
             style={{
                 width: '200px',      
                 height: '300px',   
@@ -120,7 +150,7 @@ export default function SinglePack()
             </button>
 
             <button
-                onClick={() => console.log('Button 1')}
+                onClick={quickSell}
                 style={{
                 flex: 1,
                 padding: '8px 0',
@@ -132,7 +162,7 @@ export default function SinglePack()
                 fontSize: '12px' 
                 }}
             >
-               Quicksell for: 
+               Quicksell for: {cardPrice} 
             </button>
 
 

@@ -2,9 +2,6 @@
 
 import {useState} from 'react';
 import {supabase} from '../lib/supabase'
-import { stringify } from 'querystring';
-import { isModuleNamespaceObject } from 'util/types';
-
 
 interface entry
 {
@@ -84,8 +81,13 @@ export default function SinglePack()
 
   const addToInventory = async () => {
       const mockUserID = 1;
-      const onError = await supabase.from('user_collection').update({inventory: CardDataJson}).eq('id' , mockUserID)
+
       createCardInstance(Card, mockUserID);
+
+      const {data : user} = await supabase.from('user_collection').select('inventory').eq('id', mockUserID).single();
+      const newArray =[...user?.inventory || [], Card.id];
+      const onError = await supabase.from('user_collection').update({inventory: newArray}).eq('id', mockUserID).single();
+
       setterIsOpened(false);
   }
 

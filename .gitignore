@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#the database is too big to push mabey better just keep local 
+
+/database_copy

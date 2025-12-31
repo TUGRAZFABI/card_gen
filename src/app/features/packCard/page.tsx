@@ -7,7 +7,7 @@ export default async function Page()
     return(
         <div>
             <Navigation />
-            <h1> Test </h1>
+            
             <SinglePack />
         </div>
     );

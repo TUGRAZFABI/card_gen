@@ -3,54 +3,39 @@
 import {useState} from 'react';
 import {supabase} from '../lib/supabase'
 
-interface entry
-{
-    id:number;
-    name: string;
-    class: string;
-    max_amount : number;
-    rarity : string;
-    png_id : string;
-    price : number;
-}
-
-
 function getImageUrl(png_id : string,type : string)
 {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-    return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.png`;
+
+    return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.webp`;
 }
 
-async function createCardInstance(card : any, owner_id : number)
+async function createCardInstance(id : any, owner_id : number, class_type: string)
 {
     const onError = await supabase.from('card_instance').insert(
         {
-            template_id : card.id,
-            owner_id : owner_id
+            template_id : id,
+            owner_id : owner_id,
+            class : class_type
         }
     ).select().single();
-
-
-    console.log("Create an card instance", owner_id, card.id);
 }
 
 
 export default function SinglePack()
 {
   const [isOpened, setterIsOpened] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>();
   const [cardPrice, setCardPrice] = useState<number>(0);
+  const [cardId, setCardId] = useState<number>(0);
+  const [currentTypetoOpen, setcurrentTypetoOpen] = useState<string>("MTG");
   
-  const [Card , setCard] = useState<any>();
-
   const [coins, setCoins] = useState<number>(0);
-
-  const [CardDataJson, setCardDataJson] = useState<any>();
 
 
   const openPack = async () => {
     const mockUserID = 1;
-    const randomCardID = 1;
+    const randomCardID = 7;
     const mockPriceOfPack = 10;
 
     const {data : userData} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
@@ -65,27 +50,24 @@ export default function SinglePack()
     }
     setCoins(updatedCoins);
 
-    const  data = await supabase.from('card_template').select('*').eq('id', randomCardID).single();
-    const Card = data.data as entry;
-    setCard(Card)
-    setCardPrice(Card.price);
-    console.log(data);
+    const  data = await supabase.from(currentTypetoOpen).select('*').eq('id', randomCardID).single();
 
+    setCardPrice(mockPriceOfPack);
+    setCardId(data.data.id);
+    
     const onError = await supabase.from('user_collection').update({coins: updatedCoins}).eq('id' , mockUserID)
 
-
-    setImageUrl(getImageUrl(Card.png_id, Card.class));
-    setCardDataJson(data.data);
+    setImageUrl(getImageUrl(data.data.png_id, currentTypetoOpen));
     setterIsOpened(true);
   }
 
   const addToInventory = async () => {
       const mockUserID = 1;
 
-      createCardInstance(Card, mockUserID);
+      createCardInstance(cardId, mockUserID, currentTypetoOpen);
 
       const {data : user} = await supabase.from('user_collection').select('inventory').eq('id', mockUserID).single();
-      const newArray =[...user?.inventory || [], Card.id];
+      const newArray =[...user?.inventory || [], cardId];
       const onError = await supabase.from('user_collection').update({inventory: newArray}).eq('id', mockUserID).single();
 
       setterIsOpened(false);
@@ -102,8 +84,28 @@ export default function SinglePack()
   {
     return(
         <div className='container'>
+
+            <select
+                value={currentTypetoOpen}
+                onChange={(e) => setcurrentTypetoOpen(e.target.value)}
+                style={{
+                padding: '10px',
+                borderRadius: '6px',
+                border: '1px solid #ccc',
+                fontSize: '16px',
+                marginBottom: '20px',
+                minWidth: '200px'
+                }}
+            >
+                <option value="MTG">Magic: The Gathering</option>
+                <option value="POKEMON">Pokémon TCG</option>
+                <option value="YUGIO">Yu-Gi-Oh!</option>
+                <option value="FLESH">Flesh and Blood</option>
+            </select>
+           
+            
             <img
-            src={getImageUrl("0000","MTG")}
+            src={getImageUrl("0000",currentTypetoOpen)}
             onClick={openPack}
             style={{
                 width: '200px',      
@@ -111,6 +113,26 @@ export default function SinglePack()
             }}
             >
             </img>
+
+            <button
+                onClick={openPack}
+                style={{
+                flex: 1, 
+                padding: '8px 0',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '12px', 
+                justifyContent: 'center',
+                textAlign: 'center',
+                width : '200px',
+                
+                }}
+            >
+               Open Pack
+            </button>
 
         </div>
     )

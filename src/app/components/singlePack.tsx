@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import {supabase} from '../lib/supabase'
 
+
 function getImageUrl(png_id : string,type : string)
 {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -35,29 +36,36 @@ export default function SinglePack()
 
   const openPack = async () => {
     const mockUserID = 1;
-    const randomCardID = 7;
     const mockPriceOfPack = 10;
+
 
     const {data : userData} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
 
     const currentCoins = userData?.coins || 0;
     const updatedCoins = currentCoins - mockPriceOfPack;
-
     if(updatedCoins <= 0)
     {
         //some pupup when time; 
+        console.log("NO CONIS LEFT!!!")
         return;
     }
+
     setCoins(updatedCoins);
 
-    const  data = await supabase.from(currentTypetoOpen).select('*').eq('id', randomCardID).single();
+    const  {count} = await supabase.from(currentTypetoOpen).select('*', {count : 'exact'}).eq('rarity', 'Common');
+
+    const randomCardID = Math.floor(Math.random() * (count || 0));
+    console.log("random number", randomCardID);
+
+    const  {data} = await supabase.from(currentTypetoOpen).select('*').eq('id', randomCardID).single();
 
     setCardPrice(mockPriceOfPack);
-    setCardId(data.data.id);
+    setCardId(data.id);
+    
     
     const onError = await supabase.from('user_collection').update({coins: updatedCoins}).eq('id' , mockUserID)
 
-    setImageUrl(getImageUrl(data.data.png_id, currentTypetoOpen));
+    setImageUrl(getImageUrl(data.png_id, currentTypetoOpen));
     setterIsOpened(true);
   }
 
@@ -67,7 +75,9 @@ export default function SinglePack()
       createCardInstance(cardId, mockUserID, currentTypetoOpen);
 
       const {data : user} = await supabase.from('user_collection').select('inventory').eq('id', mockUserID).single();
-      const newArray =[...user?.inventory || [], cardId];
+      const newItem = currentTypetoOpen + ',' + cardId;
+      console.log(newItem);
+      const newArray =[... user?.inventory, newItem];
       const onError = await supabase.from('user_collection').update({inventory: newArray}).eq('id', mockUserID).single();
 
       setterIsOpened(false);

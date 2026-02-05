@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {supabase} from '../lib/supabase'
+import { strict } from 'assert';
 
 
 function getImageUrl(png_id : string,type : string)
@@ -33,6 +34,12 @@ export default function SinglePack()
   
   const [coins, setCoins] = useState<number>(0);
 
+  const rarityDict = 
+    { 
+        "Common": 40, "Uncommon" : 70, "Rare" : 90,  "Mythic" : 100,
+    }
+  
+
 
   const openPack = async () => {
     const mockUserID = 1;
@@ -40,6 +47,7 @@ export default function SinglePack()
 
 
     const {data : userData} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
+    
 
     const currentCoins = userData?.coins || 0;
     const updatedCoins = currentCoins - mockPriceOfPack;
@@ -52,12 +60,31 @@ export default function SinglePack()
 
     setCoins(updatedCoins);
 
-    const  {count} = await supabase.from(currentTypetoOpen).select('*', {count : 'exact'}).eq('rarity', 'Common');
+    const rarityTypeNumber = Math.floor(Math.random() * 100) + 1;
+    const rarityString = 'Common';
 
-    const randomCardID = Math.floor(Math.random() * (count || 0));
-    console.log("random number", randomCardID);
+    for(const [word,number] of Object.entries(rarityDict))
+    {
+        if(rarityTypeNumber <= number)
+        {
+            const rarityString = word;
+        }   
+    }
 
-    const  {data} = await supabase.from(currentTypetoOpen).select('*').eq('id', randomCardID).single();
+    console.log("Das istr die rarity : " , rarityString);
+
+
+    const  {data: allCardsWithRarity} = await supabase.from(currentTypetoOpen).select('*').eq('rarity', rarityString);
+
+    if(!allCardsWithRarity || allCardsWithRarity.length === 0) {
+    console.error("No cards found for rarity:", rarityString);
+    return;
+  }
+
+    const randomIndex = Math.floor(Math.random() * allCardsWithRarity.length)
+    console.log("random number", randomIndex);
+
+    const  {data} = await supabase.from(currentTypetoOpen).select('*').eq('id', randomIndex).single();
 
     setCardPrice(mockPriceOfPack);
     setCardId(data.id);
@@ -118,8 +145,8 @@ export default function SinglePack()
             src={getImageUrl("0000",currentTypetoOpen)}
             onClick={openPack}
             style={{
-                width: '200px',      
-                height: '300px',   
+                width: '250px',      
+                height: '350px',   
             }}
             >
             </img>
@@ -137,8 +164,7 @@ export default function SinglePack()
                 fontSize: '12px', 
                 justifyContent: 'center',
                 textAlign: 'center',
-                width : '200px',
-                
+                width : '250px',
                 }}
             >
                Open Pack
@@ -155,15 +181,15 @@ export default function SinglePack()
             src={imageUrl}
             onClick={addToInventory}
             style={{
-                width: '200px',      
-                height: '300px',   
+                width: '250px',      
+                height: '350px',    
             }}
             >
             </img>
 
             <div style={{
             display: 'flex',
-            width: '200px', 
+            width: '250px', 
             gap: '5px', 
             marginTop: '10px'
             }}>
@@ -177,7 +203,7 @@ export default function SinglePack()
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '12px' 
+                fontSize: '12px',
                 }}
             >
                Move to inventory
@@ -193,7 +219,7 @@ export default function SinglePack()
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '12px' 
+                fontSize: '12px',
                 }}
             >
                Quicksell for: {cardPrice} 

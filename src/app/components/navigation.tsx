@@ -14,7 +14,7 @@ export default function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold text-gray-900">
-              MyApp
+              CARD GEN
             </Link>
           </div>
 

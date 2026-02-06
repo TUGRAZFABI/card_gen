@@ -61,20 +61,23 @@ export default function SinglePack()
     setCoins(updatedCoins);
 
     const rarityTypeNumber = Math.floor(Math.random() * 100) + 1;
-    const rarityString = 'Common';
+    let rarityString = 'Common';
+
+    console.log("Das istr die rarity : " , rarityTypeNumber);
 
     for(const [word,number] of Object.entries(rarityDict))
     {
         if(rarityTypeNumber <= number)
         {
-            const rarityString = word;
+           rarityString = word;
+           break;
         }   
     }
 
     console.log("Das istr die rarity : " , rarityString);
 
 
-    const  {data: allCardsWithRarity} = await supabase.from(currentTypetoOpen).select('*').eq('rarity', rarityString);
+    const  {data: allCardsWithRarity} = await supabase.from(currentTypetoOpen).select('*').eq('rarity', rarityString).not('png_id', 'is', null);;
 
     if(!allCardsWithRarity || allCardsWithRarity.length === 0) {
     console.error("No cards found for rarity:", rarityString);
@@ -84,8 +87,8 @@ export default function SinglePack()
     const randomIndex = Math.floor(Math.random() * allCardsWithRarity.length)
     console.log("random number", randomIndex);
 
-    const  {data} = await supabase.from(currentTypetoOpen).select('*').eq('id', randomIndex).single();
-
+    const  {data} = await supabase.from(currentTypetoOpen).select('*').eq('id', allCardsWithRarity[randomIndex].id).single();
+  
     setCardPrice(mockPriceOfPack);
     setCardId(data.id);
     

@@ -20,18 +20,18 @@ export default function LandingPage() {
                 <span className="text-blue-600 dark:text-blue-300 text-xl font-bold">1</span>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Understanding the Concept
+                Reason behind this project 
               </h3>
             </div>
             
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                This is where you explain <strong>what</strong> your feature does and 
-                <strong> why</strong> it matters. Keep it clear and focused.
+                Collecting trading cards gets more and more popular but there is no solution for passionate collectors to 
+                <strong>"cross collect"</strong> from different generes like POKEMON or MAGIC all in one application.
               </p>
               
               <h4 className="text-xl font-semibold mt-6 mb-3 text-gray-900 dark:text-white">
-                Key Points:
+                Important Points:
               </h4>
               
               <ul className="space-y-3 mb-6">
@@ -39,25 +39,26 @@ export default function LandingPage() {
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
                     <span className="text-green-600 dark:text-green-300">✓</span>
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">Point 1: Explain this benefit clearly</span>
+                  <span className="text-gray-700 dark:text-gray-300">There is no affiliation with the original producers of these cards.</span>
                 </li>
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
                     <span className="text-green-600 dark:text-green-300">✓</span>
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">Point 2: Highlight another important aspect</span>
+                  <span className="text-gray-700 dark:text-gray-300">The app is not 100% bug proof and still in development</span>
                 </li>
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
                     <span className="text-green-600 dark:text-green-300">✓</span>
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">Point 3: Mention the third key advantage</span>
+                  <span className="text-gray-700 dark:text-gray-300">Have fun :)</span>
                 </li>
               </ul>
               
               <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r">
                 <p className="text-blue-800 dark:text-blue-200 italic">
-                  💡 <strong>Pro Tip:</strong> This is a great spot for an important insight or reminder.
+                  💡 <strong>Pro Tip:</strong> You can also use the application without any registration by not loggin in you can just use the plain mock user. Or just use some 
+                     random non existend email I won't check for corectness.
                 </p>
               </div>
             </div>
@@ -83,7 +84,7 @@ export default function LandingPage() {
                   <p className="text-gray-400">
                     Create an account or login into an existing one.
                     <br/>
-                    You could also just start unpacking cards without any limits but they wont be saved anywhere
+                    You could also just start unpacking cards without any limits but they will be loaded into the mock users inventory.
                     <br/>
                     The mock user for just looking at the application is: 
                     </p>
@@ -109,35 +110,19 @@ export default function LandingPage() {
               
               <div>
                 <h4 className="text-lg font-semibold mb-3 text-blue-300">
-                  Step 3: See the result
+                  Search cards
                 </h4>
                 <div className="bg-gray-800 rounded-lg p-6 text-center">
-                  <div className="inline-block p-4 bg-blue-600 rounded-lg mb-4">
-                    <span className="text-2xl">🎉</span>
-                  </div>
-                  <p className="text-gray-300">
-                    Your component is now working! See it live below:
-                  </p>
                   
-                  {/* Interactive Demo Area */}
-                  <div className="mt-4 p-4 bg-gray-700 rounded-lg">
-                    <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition">
-                      Click to See Action
-                    </button>
-                    <div className="mt-4 text-center text-sm text-gray-400">
-                      (Interactive element will appear here)
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
-            
+          
             <div className="mt-8 pt-6 border-t border-gray-700">
               <a 
                 href="#" 
                 className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300"
               >
-                View full documentation →
               </a>
             </div>
           </div>

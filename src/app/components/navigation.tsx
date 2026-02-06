@@ -40,7 +40,7 @@ export default function Navigation() {
               Search Card
             </Link>
             <Link 
-              href="/about" 
+              href="/features/openInventory" 
               className="text-gray-600 hover:text-blue-600 transition-colors"
             >
               Inventory

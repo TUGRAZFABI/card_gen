@@ -17,15 +17,8 @@ export default function Navigation() {
               CARD GEN
             </Link>
           </div>
-
           {/* Desktop Navigation Links - Center */}
           <div className="hidden md:flex space-x-8">
-            <Link 
-              href="../features" 
-              className="text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              Generate unique
-            </Link>
             <Link 
               href="/features/packCard" 
               className="text-gray-600 hover:text-blue-600 transition-colors"
@@ -34,7 +27,7 @@ export default function Navigation() {
             </Link>
             
             <Link 
-              href="/pricing" 
+              href="/features/openSearchCards" 
               className="text-gray-600 hover:text-blue-600 transition-colors"
             >
               Search Card
@@ -93,28 +86,21 @@ export default function Navigation() {
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link 
-              href="/features" 
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Generate unique
-            </Link>
-            <Link 
-              href="/docs" 
+              href="/features/packCard" 
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Get card
             </Link>
             <Link 
-              href="/pricing" 
+              href="/features/openSearchCards" 
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               search card
             </Link>
             <Link 
-              href="/about" 
+              href="/features/openInventory" 
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >

@@ -36,7 +36,7 @@ export default function SinglePack()
 
   const rarityDict = 
     { 
-        "Common": 40, "Uncommon" : 70, "Rare" : 90,  "Mythic" : 100,
+        "Common": 50, "Uncommon" : 80, "Rare" : 100,
     }
   
 

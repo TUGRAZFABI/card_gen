@@ -8,7 +8,7 @@ export default function LandingPage() {
             Revive old childhood memories with Card Gen
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
-            Open popular trading cards packs like POKEMON or YUGIO for free!
+            Open popular trading cards packs like POKEMON or MAGIC for free!
           </p>
         </div>
 

@@ -3,14 +3,7 @@
 import {useState} from 'react';
 import {supabase} from '../lib/supabase'
 import { strict } from 'assert';
-
-
-function getImageUrl(png_id : string,type : string)
-{
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-
-    return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.webp`;
-}
+import getImageUrl from '../lib/utils';
 
 async function createCardInstance(id : any, owner_id : number, class_type: string)
 {

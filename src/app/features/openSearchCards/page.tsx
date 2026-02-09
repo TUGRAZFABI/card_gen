@@ -12,12 +12,11 @@ export default async function Page() {
       </div>
       
       <Navigation />
-      
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8 md:p-12">
-          <SearchCard />
-        </div>
+    
+      <div className="w-1/2 mx-auto">
+        <SearchCard />
       </div>
+
       
       <div className="absolute top-1/4 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute bottom-1/4 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000"></div>

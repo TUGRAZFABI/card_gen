@@ -81,7 +81,7 @@ export default function LandingPage() {
                   Get Started
                 </h4>
                 <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                  <p className="text-gray-400">
+                  <p className="text-gray-300">
                     Create an account or login into an existing one.
                     <br/>
                     You could also just start unpacking cards without any limits but they will be loaded into the mock users inventory.
@@ -112,8 +112,10 @@ export default function LandingPage() {
                 <h4 className="text-lg font-semibold mb-3 text-blue-300">
                   Search cards
                 </h4>
-                <div className="bg-gray-800 rounded-lg p-6 text-center">
-                  
+                <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                  <p className="text-gray-300">
+                  Enter youre card which you want to search in the database and select from the autocompletion list.
+                  </p>
                 </div>
               </div>
             </div>

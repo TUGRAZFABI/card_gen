@@ -8,13 +8,11 @@ export default function SearchCard()
 {
     const [userInput, setUserInput] = useState<string>('');
     const [results, setResults] = useState<any[]>([]);
-
+    const [selectedCard, setSelectedCard] = useState<any>();
 
     const autoFill = async () => 
     {
-        console.log(userInput);
-        const  {data: similarCards} = await supabase.from("MTG").select('name').ilike('name', `%${userInput}%`).limit(3);
-        console.log(similarCards);
+        const  {data: similarCards} = await supabase.from("MTG").select('*').ilike('name', `%${userInput}%`).limit(3);
         setResults(similarCards || [])
     }
 
@@ -41,8 +39,10 @@ export default function SearchCard()
                                 key={index}
                                 className="p-2 hover:bg-gray-50 cursor-pointer rounded"
                                 onClick={() => {
-                                    setUserInput(card.name); // Fill input with selected card
-                                    setResults([]); // Clear dropdown
+                                    setSelectedCard(card);
+                                    console.log(card.png_id);
+                                    
+
                                 }}
                             >
                                 <div className="font-medium">{card.name}</div>
@@ -50,6 +50,17 @@ export default function SearchCard()
                             </div>
                         ))}
                     </div>
+                </div>
+            )}
+
+            {selectedCard && (
+                <div className="mt-4">
+                    <img
+                        src={getImageUrl(selectedCard.png_id, selectedCard.class)}
+                        alt={selectedCard.name}
+                        className="w-full h-auto rounded"
+                    />
+                    <p className="mt-2 text-center font-medium">{selectedCard.name}</p>
                 </div>
             )}
         </div>

@@ -13,8 +13,8 @@ export default function SearchCard()
 
     const autoFill = async () => 
     {
-        const  {data: magicCards} = await supabase.from("MTG").select('*').ilike('name', `%${userInput}%`).limit(3);
-        const  {data: pokemonCards} = await supabase.from("POKEMON").select('*').ilike('name', `%${userInput}%`).limit(3);
+        const  {data: magicCards} = await supabase.from("MTG").select('*').ilike('name', `%${userInput}%`).not('png_id', 'is', null).limit(3);
+        const  {data: pokemonCards} = await supabase.from("POKEMON").select('*').ilike('name', `%${userInput}%`).not('png_id', 'is', null).limit(3);
         const magicWithType = (magicCards || []).map(card => ({ ...card, type: 'mtg' }));
         const pokemonWithType = (pokemonCards || []).map(card => ({ ...card, type: 'pokemon' }));
         
@@ -75,7 +75,7 @@ export default function SearchCard()
                         <img
                             src={getImageUrl(selectedCard.png_id, selectedCard.class)}
                             alt={selectedCard.name}
-                            className="w-full h-auto rounded"
+                            className="w-1/3 mx-auto h-auto rounded"
                         />
                         <p className="mt-2 text-center font-medium">{selectedCard.name}</p>
                     </div>

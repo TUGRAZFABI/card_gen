@@ -70,7 +70,7 @@ export default function SinglePack()
     console.log("Das istr die rarity : " , rarityString);
 
 
-    const  {data: allCardsWithRarity} = await supabase.from(currentTypetoOpen).select('*').eq('rarity', rarityString).not('png_id', 'is', null);;
+    const  {data: allCardsWithRarity} = await supabase.from(currentTypetoOpen).select('*').eq('rarity', rarityString).not('png_id', 'is', null);
 
     if(!allCardsWithRarity || allCardsWithRarity.length === 0) {
     console.error("No cards found for rarity:", rarityString);

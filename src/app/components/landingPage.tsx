@@ -86,7 +86,6 @@ export default function LandingPage() {
                     <br/>
                     You could also just start unpacking cards without any limits but they will be loaded into the mock users inventory.
                     <br/>
-                    The mock user for just looking at the application is: 
                     </p>
                 </div>
               </div>

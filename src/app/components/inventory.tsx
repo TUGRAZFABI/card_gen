@@ -3,6 +3,7 @@
 import {useEffect, useState} from 'react';
 import {supabase} from '../lib/supabase'
 import getImageUrl from '../lib/utils'
+import { projectInvalidateFileSystemCache } from 'next/dist/build/swc/generated-native';
 
 interface CardItem {
   id: string
@@ -11,6 +12,7 @@ interface CardItem {
   name: string
   png_id?: string
   quantity: number
+  price: number
 }
 
 
@@ -18,6 +20,17 @@ export default function Inventory()
 {
     const [imageUrl, setImageUrl] = useState<string>();
     const [allCards, setAllCards] = useState<CardItem[]>([]);
+    const [singleCard, setSingleCard] = useState<CardItem>(
+    {
+        id: '',
+        template_id: 0,
+        class: '',
+        name: '',
+        png_id: '',
+        quantity: 0,
+        price : 0
+    }
+    );
 
     useEffect(() => {
         getInventory()
@@ -25,24 +38,29 @@ export default function Inventory()
 
     const getInventory = async() => 
     {
-      let mockUserID = 1
-      
-      const { data: instances } = await supabase
-        .from('card_instance')
-        .select('*')
-        .eq('owner_id', mockUserID)
+        let mockUserID = 1
+    
 
-        if(instances == null)
+        const{data: user} = await supabase
+        .from('user_collection')
+        .select('*').eq('id', mockUserID).single();
+
+        if(user == null)
         {
+            console.log("User not found!")
             setAllCards([]);
             return;
         }
 
         let mapOfAllCards = new Map<string, CardItem>();
 
-        for (const instance of instances )
+
+
+        for (const instance of user.inventory )
         {
-            const key = `${instance.class}_${instance.template_id}`
+            const [className, idString] = instance.split(',');
+            const templateId = parseInt(idString, 10);
+            const key = `${className}_${idString}`
 
             if(mapOfAllCards.has(key))
             {
@@ -52,17 +70,17 @@ export default function Inventory()
             else
             {
                 const { data: imageURL } = await supabase
-                    .from(instance.class)
+                    .from(className)
                     .select('*')
-                    .eq('id', instance.template_id).single();
+                    .eq('id', idString).single();
                 mapOfAllCards.set(key, {
-                    id: instance.id,
-                    template_id: instance.template_id,
-                    class: instance.class,
+                    id: idString,
+                    template_id: templateId,
+                    class: className,
                     name: imageURL.name,
                     png_id : imageURL.png_id,
-                    quantity: 1
-                    
+                    quantity: 1,
+                    price : imageURL.price
                 }) 
             }
     }
@@ -71,6 +89,14 @@ export default function Inventory()
         setAllCards(cardArray);
     }
 
+    const quickSell = async () => {
+        const mockUserID = 1;
+        let {data : user} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
+        await supabase.from('user_collection').update({coins: singleCard.price + user?.coins}).eq('id' , mockUserID);
+        await supabase.from('card_instance').delete().eq('id' , mockUserID);
+
+        return;
+    }
 
     
 
@@ -98,6 +124,18 @@ export default function Inventory()
             <p className="text-xs text-gray-500">
                 {card.class} • {card.quantity}x
             </p>
+            <button
+            onClick={quickSell}
+            style={{
+            backgroundColor: '#ef4444',
+            color: 'white',
+            padding: '5px 10px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+            }}>
+                Sell
+            </button>
             </div>
         </div>
         ))}

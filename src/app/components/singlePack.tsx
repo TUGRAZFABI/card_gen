@@ -132,8 +132,6 @@ export default function SinglePack()
             >
                 <option value="MTG">Magic: The Gathering</option>
                 <option value="POKEMON">Pokémon TCG</option>
-                <option value="YUGIO">Yu-Gi-Oh!</option>
-                <option value="FLESH">Flesh and Blood</option>
             </select>
            
             

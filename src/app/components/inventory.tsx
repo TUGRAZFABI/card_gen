@@ -91,11 +91,25 @@ export default function Inventory()
 
     const quickSell = async () => {
         const mockUserID = 1;
-        let {data : user} = await supabase.from('user_collection').select('coins').eq('id', mockUserID).single();
+        let {data : user} = await supabase.from('user_collection').select('*').eq('id', mockUserID).single();
         await supabase.from('user_collection').update({coins: singleCard.price + user?.coins}).eq('id' , mockUserID);
-        await supabase.from('card_instance').delete().eq('id' , mockUserID);
+        //await supabase.from('card_instance').update({in_inventory : false}).eq('id' , mockUserID).eq('template_id', singleCard.id);
+        
+        //fetch the whole inventory search entry to delete and update cell#
+        let indexToDelete = 0;
+        for(const instance in user.inventory)
+        {
+            const [className, idString] = instance.split(',');
+            
+            if(className == singleCard.class && idString == singleCard.id)
+            {
+                const updatedInventory = allCards.filter((_, index) => index !== indexToDelete);
+                await supabase.from('user_collection').update({inventory: updatedInventory}).eq('id' , mockUserID);
 
-        return;
+                break;
+            }
+            indexToDelete++;
+        }
     }
 
     
@@ -125,7 +139,12 @@ export default function Inventory()
                 {card.class} • {card.quantity}x
             </p>
             <button
-            onClick={quickSell}
+            onClick={() => {
+                setSingleCard(card);
+                quickSell();
+                console.log(card)
+                        }
+            }
             style={{
             backgroundColor: '#ef4444',
             color: 'white',

@@ -34,8 +34,9 @@ export default function getImageUrl(png_id: string, type: string) {
 ``
 
 
-# Avoiding of shutting down the database 
+# Avoiding the shutting down of the database 
 I have set an github workflow which automatically makes a simple ping to the database in order to keep my whole supabase project alive. (They delete youre free tier project after some inactivity)
+
 ```
 name: Keep Supabase Alive
 

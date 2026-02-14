@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Menu, X, Github, User } from 'lucide-react'
-import Link from 'next/link'
+import { useState } from 'react';
+import { Menu, X, Github, User } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
@@ -19,21 +19,21 @@ export default function Navigation() {
           </div>
           {/* Desktop Navigation Links - Center */}
           <div className="hidden md:flex space-x-8">
-            <Link 
-              href="/features/packCard" 
+            <Link
+              href="/features/packCard"
               className="text-gray-600 hover:text-blue-600 transition-colors"
             >
               Get Card
             </Link>
-            
-            <Link 
-              href="/features/openSearchCards" 
+
+            <Link
+              href="/features/openSearchCards"
               className="text-gray-600 hover:text-blue-600 transition-colors"
             >
               Search Card
             </Link>
-            <Link 
-              href="/features/openInventory" 
+            <Link
+              href="/features/openInventory"
               className="text-gray-600 hover:text-blue-600 transition-colors"
             >
               Inventory
@@ -54,8 +54,8 @@ export default function Navigation() {
             </a>
 
             {/* Login Button */}
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="hidden sm:inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors px-3 py-1"
             >
               <User className="w-4 h-4 mr-1" />
@@ -63,18 +63,15 @@ export default function Navigation() {
             </Link>
 
             {/* Register Button */}
-            <Link 
-              href="/features/registration" 
+            <Link
+              href="/features/registration"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
             >
               Get Started
             </Link>
 
             {/* Mobile menu button */}
-            <button 
-              className="md:hidden p-2"
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -85,28 +82,28 @@ export default function Navigation() {
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link 
-              href="/features/packCard" 
+            <Link
+              href="/features/packCard"
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Get card
             </Link>
-            <Link 
-              href="/features/openSearchCards" 
+            <Link
+              href="/features/openSearchCards"
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               search card
             </Link>
-            <Link 
-              href="/features/openInventory" 
+            <Link
+              href="/features/openInventory"
               className="block px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Inventory
             </Link>
-            
+
             {/* Mobile GitHub link */}
             <a
               href="https://github.com/TUGRAZFABI/card_gen"
@@ -120,8 +117,8 @@ export default function Navigation() {
             </a>
 
             {/* Mobile login button */}
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="flex items-center px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -132,5 +129,5 @@ export default function Navigation() {
         </div>
       )}
     </nav>
-  )
+  );
 }

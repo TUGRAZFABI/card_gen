@@ -20,32 +20,38 @@ export default function LandingPage() {
                 <span className="text-blue-600 dark:text-blue-300 text-xl font-bold">1</span>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Reason behind this project 
+                Reason behind this project
               </h3>
             </div>
-            
+
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                Collecting trading cards gets more and more popular but there is no solution for passionate collectors to 
-                <strong>"cross collect"</strong> from different generes like POKEMON or MAGIC all in one application.
+                Collecting trading cards gets more and more popular but there is no solution for
+                passionate collectors to
+                <strong>"cross collect"</strong> from different generes like POKEMON or MAGIC all in
+                one application.
               </p>
-              
+
               <h4 className="text-xl font-semibold mt-6 mb-3 text-gray-900 dark:text-white">
                 Important Points:
               </h4>
-              
+
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
                     <span className="text-green-600 dark:text-green-300">✓</span>
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">There is no affiliation with the original producers of these cards.</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    There is no affiliation with the original producers of these cards.
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
                     <span className="text-green-600 dark:text-green-300">✓</span>
                   </div>
-                  <span className="text-gray-700 dark:text-gray-300">The app is not 100% bug proof and still in development</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    The app is not 100% bug proof and still in development
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-3 mt-1 flex-shrink-0">
@@ -54,11 +60,12 @@ export default function LandingPage() {
                   <span className="text-gray-700 dark:text-gray-300">Have fun :)</span>
                 </li>
               </ul>
-              
+
               <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r">
                 <p className="text-blue-800 dark:text-blue-200 italic">
-                  💡 <strong>Pro Tip:</strong> You can also use the application without any registration by not loggin in you can just use the plain mock user. Or just use some 
-                     random non existend email I won't check for corectness.
+                  💡 <strong>Pro Tip:</strong> You can also use the application without any
+                  registration by not loggin in you can just use the plain mock user. Or just use
+                  some random non existend email I won't check for corectness.
                 </p>
               </div>
             </div>
@@ -70,30 +77,25 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white text-xl font-bold">2</span>
               </div>
-              <h3 className="text-2xl font-bold text-white">
-                Functionalities
-              </h3>
+              <h3 className="text-2xl font-bold text-white">Functionalities</h3>
             </div>
-            
+
             <div className="space-y-6">
               <div>
-                <h4 className="text-lg font-semibold mb-3 text-blue-300">
-                  Get Started
-                </h4>
+                <h4 className="text-lg font-semibold mb-3 text-blue-300">Get Started</h4>
                 <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
                   <p className="text-gray-300">
                     Create an account or login into an existing one.
-                    <br/>
-                    You could also just start unpacking cards without any limits but they will be loaded into the mock users inventory.
-                    <br/>
-                    </p>
+                    <br />
+                    You could also just start unpacking cards without any limits but they will be
+                    loaded into the mock users inventory.
+                    <br />
+                  </p>
                 </div>
               </div>
-              
+
               <div>
-                <h4 className="text-lg font-semibold mb-3 text-blue-300">
-                  Get Cards 
-                </h4>
+                <h4 className="text-lg font-semibold mb-3 text-blue-300">Get Cards</h4>
                 <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
                   <p className="text-gray-300">
                     Navigate to Get Cards
@@ -106,25 +108,23 @@ export default function LandingPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div>
-                <h4 className="text-lg font-semibold mb-3 text-blue-300">
-                  Search cards
-                </h4>
+                <h4 className="text-lg font-semibold mb-3 text-blue-300">Search cards</h4>
                 <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
                   <p className="text-gray-300">
-                  Enter youre card which you want to search in the database and select from the autocompletion list.
+                    Enter youre card which you want to search in the database and select from the
+                    autocompletion list.
                   </p>
                 </div>
               </div>
             </div>
-          
+
             <div className="mt-8 pt-6 border-t border-gray-700">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300"
-              >
-              </a>
+              ></a>
             </div>
           </div>
         </div>

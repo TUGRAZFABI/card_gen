@@ -9,7 +9,34 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+```
+Both the Url and Anon Key have to stay private for security reasons for example a third party could change or delete the whole database.
+Both secret enviroment variables are saved on the Vercel project and is handled securly and should not leak.
+
+The database is oganized like this:
+Tables for the indvidual cards which feature thier name,id,price, the png id of the image in store container and a lot of metadata.
+You can find the plain data in the cardData folder in the root of the project.
+Example for a card table: 
+<img width="1555" height="850" alt="image" src="https://github.com/user-attachments/assets/f2915ede-b6ed-48c9-ab05-6b52b1b870bb" />
+
+The pictures for the cards come from a supabase bucket which holds all images of the cards and have the .webp datatype because for web application it loads way faster than .png or .jpg.
+<img width="1612" height="809" alt="image" src="https://github.com/user-attachments/assets/52ab0d9d-ec37-4786-98c7-6fef9146b021" />
+The pictures get fetched acsessing the image id (which is an column in each card table) and is fetched from this bucket with this function: 
+```
+//from the ../lib/utils
+import { supabase } from '../lib/supabase';
+
+export default function getImageUrl(png_id: string, type: string) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+
+  return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.webp`;
+}
 ``
+
+
+
+I have set an github workflow which automatically makes a simple ping to the database in order to keep my whole supabase project alive. (They delete youre free tier project after some inactivity)
+
 
 
 

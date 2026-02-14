@@ -31,7 +31,7 @@ export default function getImageUrl(png_id: string, type: string) {
 
   return `${supabaseUrl}/storage/v1/object/public/all_cards/${type}/${png_id}.webp`;
 }
-``
+```
 
 
 # Avoiding the shutting down of the database 

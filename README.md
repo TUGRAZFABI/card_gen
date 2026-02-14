@@ -34,17 +34,52 @@ export default function getImageUrl(png_id: string, type: string) {
 ``
 
 
-
+# Avoiding of shutting down the database 
 I have set an github workflow which automatically makes a simple ping to the database in order to keep my whole supabase project alive. (They delete youre free tier project after some inactivity)
+```
+name: Keep Supabase Alive
 
+on:
+  schedule:
+    - cron: "0 0 */7 * *" # Every 7 days at midnight UTC
+  workflow_dispatch: # Allows manual runs
+  push: # Runs when you push code (good for testing)
 
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Check Supabase connection
+        run: |
+          echo "🕒 Starting at: $(date)"
 
+          # Test the connection
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
 
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ SUCCESS: Supabase project is alive!"
+            echo "📡 HTTP Status: $RESPONSE"
+          else
+            echo "❌ FAILED: HTTP Status $RESPONSE"
+            echo "🔍 Check your Supabase URL and API key"
+            exit 1  # This makes the workflow fail (good for alerts)
+          fi
 
+          echo "🏁 Finished at: $(date)"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-
-
+      - name: Log success
+        if: success()
+        run: |
+          echo "🎉 Keep-alive completed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "Timestamp: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          ```
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).

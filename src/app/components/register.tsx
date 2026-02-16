@@ -23,21 +23,22 @@ export default function Register() {
     if (isAlreadyRegistered != null) {
       alert('User already registered!');
       return;
+    } else if (username == '' || password == '' || email == '') {
+      alert("Form can't be empty");
+      return;
     }
 
     //General security notes:
     //The api ensures that the email and passwords are hashed and stored securly.
-    /*
-    const { data, error: onError } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
 
-    if (onError) {
-      alert(`Signup failed: ${onError.message}`);
-      return;
+    //the supabase free tier only allows really low requests a day so just continue when no more is availale.
+    if (error) {
+      console.log(error);
     }
-    */
 
     await supabase.from('user_collection').insert({
       username: username,
@@ -51,7 +52,7 @@ export default function Register() {
 
   return (
     <div>
-      <h1>Sign Up</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSignup}>
         <input
           value={username}
@@ -72,7 +73,12 @@ export default function Register() {
           type="password"
         />
         <p />
-        <button type="submit">Sign Up</button>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          type="submit"
+        >
+          Sign Up
+        </button>
       </form>
     </div>
   );

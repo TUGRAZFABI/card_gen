@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import getImageUrl from '../lib/utils';
+import { CurrentUser, useUser } from '../lib/userContext';
 
 interface CardItem {
   id: string;
@@ -17,6 +18,8 @@ interface CardItem {
 export default function Inventory() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [allCards, setAllCards] = useState<CardItem[]>([]);
+
+  const { userId, setUserId } = useUser();
 
   useEffect(() => {
     getInventory();

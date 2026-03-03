@@ -3,50 +3,62 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/navigation';
+import { CurrentUser, useUser } from '../lib/userContext';
 
 export default function Register() {
-  const [username, setUsername] = useState<string>('');
+  const [registerUser, setregisterUser] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const router = useRouter();
+  const { setUserId, setUsername } = useUser();
+
+  const crypto = require('crypto');
+
+  function privateSHA256() {
+    const uuid = 'f9436ba5-3af0-47b6-9442-227a640dceef';
+    return crypto.createHash('sha256').update(uuid).digest('hex');
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    //check if user exists in the table mabey hash this when table leaks all usernames emails leak!
+    //check if user exists in the table mabey hash this when table leaks all registerUsers emails leak!
     const { data: isAlreadyRegistered } = await supabase
       .from('user_collection')
       .select('*')
-      .or(`username.ilike.%${username}%,email.ilike.%${email}%`)
+      .or(`registerUser.ilike.%${registerUser}%,email.ilike.%${email}%`)
       .maybeSingle();
 
     if (isAlreadyRegistered != null) {
       alert('User already registered!');
       return;
-    } else if (username == '' || password == '' || email == '') {
+    } else if (registerUser == '' || password == '' || email == '') {
       alert("Form can't be empty");
       return;
     }
 
     //General security notes:
     //The api ensures that the email and passwords are hashed and stored securly.
+    /*
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
 
-    //the supabase free tier only allows really low requests a day so just continue when no more is availale.
-    if (error) {
-      console.log(error);
-    }
+    const user_id = data ? data.user?.id : privateSHA256(); //I know this is a huge security issue and also then the native /login doesnt work.
+    */
+
+    const user_id = privateSHA256();
 
     await supabase.from('user_collection').insert({
-      username: username,
+      registerUser: registerUser,
       email: email,
       coins: 1000,
       inventory: [],
+      authID: user_id,
     });
-
+    setUsername(registerUser);
+    setUserId(user_id);
     router.push('/'); //redirect to the landing page!
   };
 
@@ -55,9 +67,9 @@ export default function Register() {
       <h1>Register</h1>
       <form onSubmit={handleSignup}>
         <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username....."
+          value={registerUser}
+          onChange={(e) => setregisterUser(e.target.value)}
+          placeholder="registerUser....."
         />
         <p />
         <input

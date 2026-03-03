@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Navigation from './components/navigation';
 import LandingPage from './components/landingPage';
+import { CurrentUser } from './lib/userContext';
 import './globals.css';
 import { JSX } from 'react';
 
@@ -13,8 +14,10 @@ export const data: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   //must return a specific structure since next 13+
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html>
+      <body>
+        <CurrentUser>{children}</CurrentUser>
+      </body>
     </html>
   );
 }

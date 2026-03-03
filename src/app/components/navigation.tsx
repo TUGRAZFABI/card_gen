@@ -1,11 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { CurrentUser, useUser } from '../lib/userContext';
+
 import { Menu, X, Github, User } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { userId, username, setUserId, setUsername } = useUser();
 
   return (
     <nav className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
@@ -54,21 +58,49 @@ export default function Navigation() {
             </a>
 
             {/* Login Button */}
-            <Link
-              href="/login"
-              className="hidden sm:inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors px-3 py-1"
-            >
-              <User className="w-4 h-4 mr-1" />
-              <span>Login</span>
-            </Link>
+            {userId ? (
+              <>
+                <Link
+                  href="/features/openInventory"
+                  className="hidden sm:inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors px-3 py-1"
+                >
+                  <User className="w-4 h-4 mr-1" />
+                  {username || 'User'}
+                </Link>
 
-            {/* Register Button */}
-            <Link
-              href="/features/registration"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-            >
-              Get Started
-            </Link>
+                <Link
+                  href="/"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  <button
+                    onClick={() => {
+                      setUserId(null);
+                      setUsername(null);
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  >
+                    Log out
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/"
+                  className="hidden sm:inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors px-3 py-1"
+                >
+                  <User className="w-4 h-4 mr-1" />
+                  <span>Login</span>
+                </Link>
+
+                <Link
+                  href="/features/registration"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
 
             {/* Mobile menu button */}
             <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)}>

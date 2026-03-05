@@ -19,19 +19,19 @@ export default function Inventory() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [allCards, setAllCards] = useState<CardItem[]>([]);
 
-  const { userId, setUserId } = useUser();
+  const { userId, username, setUserId } = useUser();
 
   useEffect(() => {
     getInventory();
   }, []);
 
   const getInventory = async () => {
-    let mockUserID = 1;
+    let currentUserId = userId || 1;
 
     const { data: user } = await supabase
       .from('user_collection')
       .select('*')
-      .eq('id', mockUserID)
+      .eq('id', currentUserId)
       .single();
 
     if (user == null) {
@@ -73,17 +73,17 @@ export default function Inventory() {
   };
 
   const quickSell = async (cardToSell: CardItem) => {
-    const mockUserID = 1;
+    const currentUserId = userId || 1;
     let { data: user } = await supabase
       .from('user_collection')
       .select('*')
-      .eq('id', mockUserID)
+      .eq('id', currentUserId)
       .single();
     await supabase
       .from('user_collection')
       .update({ coins: cardToSell.price + user?.coins })
-      .eq('id', mockUserID);
-    //await supabase.from('card_instance').update({in_inventory : false}).eq('id' , mockUserID).eq('template_id', singleCard.id);
+      .eq('id', currentUserId);
+    //await supabase.from('card_instance').update({in_inventory : false}).eq('id' , currentUserId).eq('template_id', singleCard.id);
 
     //fetch the whole inventory search entry to delete and update cell#
     let indexToDelete = 0;
@@ -98,7 +98,7 @@ export default function Inventory() {
         await supabase
           .from('user_collection')
           .update({ inventory: updatedInventory })
-          .eq('id', mockUserID);
+          .eq('id', currentUserId);
         console.log('Final index to delete: ', indexToDelete);
         break;
       }

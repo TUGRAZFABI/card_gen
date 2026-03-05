@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { strict } from 'assert';
 import getImageUrl from '../lib/utils';
+import { CurrentUser, useUser } from '../lib/userContext';
 
 async function createCardInstance(id: any, owner_id: number, class_type: string) {
   const onError = await supabase
@@ -26,6 +27,8 @@ export default function SinglePack() {
 
   const [coins, setCoins] = useState<number>(0);
 
+  const { userId, username, setUserId } = useUser();
+
   const rarityDict = {
     Common: 50,
     Uncommon: 80,
@@ -33,8 +36,10 @@ export default function SinglePack() {
   };
 
   const openPack = async () => {
-    const mockUserID = 1;
+    const mockUserID = userId || 1;
     const mockPriceOfPack = 10;
+
+    console.log(userId);
 
     const { data: userData } = await supabase
       .from('user_collection')
@@ -99,9 +104,9 @@ export default function SinglePack() {
   };
 
   const addToInventory = async () => {
-    const mockUserID = 1;
+    let mockUserID = userId;
 
-    createCardInstance(cardId, mockUserID, currentTypetoOpen);
+    await createCardInstance(cardId, mockUserID, currentTypetoOpen);
 
     const { data: user } = await supabase
       .from('user_collection')

@@ -57,8 +57,8 @@ export default function Navigation() {
               <span className="text-sm">GitHub</span>
             </a>
 
-            {/* Login Button */}
-            {userId ? (
+            {/* Login Button  just admin user when no one is logged in*/}
+            {userId != 1 ? (
               <>
                 <Link
                   href="/features/openInventory"
@@ -74,8 +74,8 @@ export default function Navigation() {
                 >
                   <button
                     onClick={() => {
-                      setUserId(null);
-                      setUsername(null);
+                      setUserId(1);
+                      setUsername('simpleMockUser');
                     }}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                   >

@@ -16,18 +16,20 @@ export default function Register() {
   const crypto = require('crypto');
 
   function privateSHA256() {
-    const uuid = 'f9436ba5-3af0-47b6-9442-227a640dceef';
+    const uuid = `${email}-${Date.now()}-${Math.random()}`;
     return crypto.createHash('sha256').update(uuid).digest('hex');
   }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     //check if user exists in the table mabey hash this when table leaks all registerUsers emails leak!
-    const { data: isAlreadyRegistered } = await supabase
+    const { data: isAlreadyRegistered, error: test2 } = await supabase
       .from('user_collection')
       .select('*')
-      .or(`registerUser.ilike.%${registerUser}%,email.ilike.%${email}%`)
+      .or(`username.ilike.%${registerUser}%,email.ilike.%${email}%`)
       .maybeSingle();
+
+    console.log(test2);
 
     if (isAlreadyRegistered != null) {
       alert('User already registered!');
@@ -50,15 +52,25 @@ export default function Register() {
 
     const user_id = privateSHA256();
 
-    await supabase.from('user_collection').insert({
-      registerUser: registerUser,
-      email: email,
-      coins: 1000,
-      inventory: [],
-      authID: user_id,
-    });
+    const { data: data } = await supabase
+      .from('user_collection')
+      .insert({
+        username: registerUser,
+        email: email,
+        coins: 1000,
+        inventory: [],
+        authID: user_id,
+      })
+      .select();
+
+    if (data == null) {
+      console.log('Fail');
+      return;
+    }
+
     setUsername(registerUser);
-    setUserId(user_id);
+    setUserId(data[0].id);
+    console.log('test', data[0].id);
     router.push('/'); //redirect to the landing page!
   };
 

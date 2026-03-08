@@ -42,6 +42,13 @@ export default function Navigation() {
             >
               Inventory
             </Link>
+
+            <Link
+              href="/features/marketplace"
+              className="text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Marketplace
+            </Link>
           </div>
 
           {/* Right side buttons - GitHub, Login, Register */}
@@ -134,6 +141,13 @@ export default function Navigation() {
               onClick={() => setIsOpen(false)}
             >
               Inventory
+            </Link>
+
+            <Link
+              href="/features/marketplace"
+              className="text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Marketplace
             </Link>
 
             {/* Mobile GitHub link */}

@@ -1,4 +1,3 @@
-// app/components/explain-tutorial.tsx
 export default function LandingPage() {
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-900">
@@ -115,6 +114,16 @@ export default function LandingPage() {
                   <p className="text-gray-300">
                     Enter youre card which you want to search in the database and select from the
                     autocompletion list.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3 text-blue-300">Marketplace</h4>
+                <div className="bg-gray-800 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                  <p className="text-gray-300">
+                    Sell cards you dont need anymore or buy cards you need for youre collection.
+                    STILL IN DEVELOPMENT!
                   </p>
                 </div>
               </div>

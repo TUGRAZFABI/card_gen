@@ -18,6 +18,7 @@ interface CardItem {
 export default function Inventory() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [allCards, setAllCards] = useState<CardItem[]>([]);
+  let [price, setPrice] = useState<string>();
 
   const { userId, username, setUserId } = useUser();
 
@@ -43,7 +44,7 @@ export default function Inventory() {
     let mapOfAllCards = new Map<string, CardItem>();
 
     for (const instance of user.inventory) {
-      const [className, idString] = instance.split(',');
+      const [className, templateID, idString] = instance.split(',');
       const templateId = parseInt(idString, 10);
       const key = `${className}_${idString}`;
 
@@ -73,22 +74,35 @@ export default function Inventory() {
   };
 
   const quickSell = async (cardToSell: CardItem) => {
-    const currentUserId = userId || 1;
-    let { data: user } = await supabase
-      .from('user_collection')
-      .select('*')
-      .eq('id', currentUserId)
-      .single();
     await supabase
       .from('user_collection')
-      .update({ coins: cardToSell.price + user?.coins })
-      .eq('id', currentUserId);
-    //await supabase.from('card_instance').update({in_inventory : false}).eq('id' , currentUserId).eq('template_id', singleCard.id);
+      .update({ coins: supabase.rpc('increment', { amount: cardToSell.price }) })
+      .eq('id', userId);
 
-    //fetch the whole inventory search entry to delete and update cell#
+    updatedInventory(cardToSell);
+  };
+
+  const sellOnMarket = async (cardToSell: CardItem) => {
+    const currentUserId = userId;
+
+    await supabase.from('marketplace').insert({
+      seller_id: currentUserId,
+      price: price,
+      card_instance_id: cardToSell.id,
+    });
+    updatedInventory(cardToSell);
+    getInventory();
+  };
+
+  const updatedInventory = async (cardToSell: any) => {
     let indexToDelete = 0;
+    const { data: user } = await supabase
+      .from('user_collection')
+      .select('*')
+      .eq('id', userId)
+      .single();
     for (let i = 0; i < user.inventory.length; i++) {
-      const [className, idString] = user.inventory[i].split(',');
+      const [className, tewmplateID, idString] = user.inventory[i].split(',');
       console.log('name and class', className, idString);
 
       if (className == cardToSell.class && idString == cardToSell.id) {
@@ -98,7 +112,7 @@ export default function Inventory() {
         await supabase
           .from('user_collection')
           .update({ inventory: updatedInventory })
-          .eq('id', currentUserId);
+          .eq('id', userId || 1);
         console.log('Final index to delete: ', indexToDelete);
         break;
       }
@@ -147,6 +161,32 @@ export default function Inventory() {
                 }}
               >
                 Sell
+              </button>
+
+              <div className="mb-4">
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="Enter price"
+                  className="border rounded px-3 py-1.5 w-28"
+                />
+              </div>
+
+              <button
+                onClick={async () => {
+                  await sellOnMarket(card);
+                }}
+                style={{
+                  backgroundColor: '#6944efff',
+                  color: 'white',
+                  padding: '1px 3px',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Sell on market
               </button>
             </div>
           </div>

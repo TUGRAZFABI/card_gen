@@ -7,15 +7,18 @@ import getImageUrl from '../lib/utils';
 import { CurrentUser, useUser } from '../lib/userContext';
 
 async function createCardInstance(id: any, owner_id: number, class_type: string) {
-  const onError = await supabase
+  const { data: data } = await supabase
     .from('card_instance')
     .insert({
       template_id: id,
       owner_id: owner_id,
       class: class_type,
     })
-    .select()
-    .single();
+    .select();
+  if (data == null) {
+    return;
+  }
+  return data[0].id;
 }
 
 export default function SinglePack() {
@@ -106,14 +109,14 @@ export default function SinglePack() {
   const addToInventory = async () => {
     let mockUserID = userId;
 
-    await createCardInstance(cardId, mockUserID, currentTypetoOpen);
+    const templateID = await createCardInstance(cardId, mockUserID, currentTypetoOpen);
 
     const { data: user } = await supabase
       .from('user_collection')
       .select('inventory')
       .eq('id', mockUserID)
       .single();
-    const newItem = currentTypetoOpen + ',' + cardId;
+    const newItem = currentTypetoOpen + ',' + templateID + ',' + cardId;
     console.log(newItem);
     const newArray = [...user?.inventory, newItem];
     const onError = await supabase

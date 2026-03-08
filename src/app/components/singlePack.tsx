@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { strict } from 'assert';
-import getImageUrl from '../lib/utils';
+import { getImageUrl } from '../lib/utils';
 import { CurrentUser, useUser } from '../lib/userContext';
 
 async function createCardInstance(id: any, owner_id: number, class_type: string) {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import getImageUrl from '../lib/utils';
+import { getImageUrl } from '../lib/utils';
 
 export default function SearchCard() {
   const [userInput, setUserInput] = useState<string>('');

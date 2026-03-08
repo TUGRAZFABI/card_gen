@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import getImageUrl from '../lib/utils';
+import { getImageUrl, deleteInstance, updateUserCoins } from '../lib/utils';
 import { CurrentUser, useUser } from '../lib/userContext';
 
 interface CardItem {
@@ -74,12 +74,9 @@ export default function Inventory() {
   };
 
   const quickSell = async (cardToSell: CardItem) => {
-    await supabase
-      .from('user_collection')
-      .update({ coins: supabase.rpc('increment', { amount: cardToSell.price }) })
-      .eq('id', userId);
-
     updatedInventory(cardToSell);
+    updateUserCoins(userId, cardToSell.price);
+    deleteInstance(cardToSell.id);
   };
 
   const sellOnMarket = async (cardToSell: CardItem) => {

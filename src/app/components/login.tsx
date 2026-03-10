@@ -15,6 +15,19 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    //just for dev i add a really usafe login without any password chechking etc change!!!
+    //TODO ADD the native function for security big sec issue!!
+    const { data } = await supabase
+      .from('user_collection')
+      .select('id , username')
+      .eq('email', email)
+      .single();
+    if (data == null) {
+      console.log('Error the emaill is not registered');
+      return;
+    }
+    setUserId(data.id);
+    setUsername(data.username);
 
     router.push('/');
   };
@@ -23,11 +36,6 @@ export default function Login() {
     <div>
       <h1>Enter credentials</h1>
       <form onSubmit={handleLogin}>
-        <input
-          value={registerUser}
-          onChange={(e) => setregisterUser(e.target.value)}
-          placeholder="registerUser....."
-        />
         <p />
         <input
           value={email}

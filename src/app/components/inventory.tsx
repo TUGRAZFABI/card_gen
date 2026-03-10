@@ -18,7 +18,7 @@ interface CardItem {
 export default function Inventory() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [allCards, setAllCards] = useState<CardItem[]>([]);
-  let [price, setPrice] = useState<string>();
+  let [price, setPrice] = useState<string>('');
 
   const { userId, username, setUserId } = useUser();
 
@@ -27,7 +27,7 @@ export default function Inventory() {
   }, []);
 
   const getInventory = async () => {
-    let currentUserId = userId || 1;
+    let currentUserId = userId;
 
     const { data: user } = await supabase
       .from('user_collection')
@@ -86,6 +86,9 @@ export default function Inventory() {
       seller_id: currentUserId,
       price: price,
       card_instance_id: cardToSell.id,
+      seller_username: username,
+      png_id: cardToSell.png_id,
+      class: cardToSell.class,
     });
     updatedInventory(cardToSell);
     getInventory();

@@ -149,6 +149,7 @@ export default function Inventory() {
               </p>
               <button
                 onClick={async () => {
+                  console.log(card.png_id, card.class);
                   await quickSell(card);
                 }}
                 style={{

@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { getImageUrl, deleteInstance, updateUserCoins } from '../lib/utils';
+import {
+  getImageUrl,
+  deleteInstance,
+  updateUserCoins,
+  removeFromMarketAndChangeOwnership,
+} from '../lib/utils';
 import { CurrentUser, useUser } from '../lib/userContext';
 
 interface CardItem {
@@ -45,8 +50,9 @@ export default function Marketplace() {
   };
 
   const buyCard = async (card: CardItem) => {
-    deleteInstance(card.id);
-    updateUserCoins(userId, -card.price);
+    await updateUserCoins(userId, card.price);
+    await removeFromMarketAndChangeOwnership(card, userId);
+    await getMarket();
   };
 
   return (

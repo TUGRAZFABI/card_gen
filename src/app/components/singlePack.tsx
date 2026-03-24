@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { strict } from 'assert';
-import { getImageUrl } from '../lib/utils';
+import { getImageUrl, updateUserCoins } from '../lib/utils';
 import { CurrentUser, useUser } from '../lib/userContext';
 
 async function createCardInstance(id: any, owner_id: number, class_type: string) {
@@ -39,31 +39,21 @@ export default function SinglePack() {
   };
 
   const openPack = async () => {
-    const mockUserID = userId || 1;
     const mockPriceOfPack = 10;
-
-    console.log(userId);
 
     const { data: userData } = await supabase
       .from('user_collection')
-      .select('coins')
-      .eq('id', mockUserID)
+      .select('*')
+      .eq('id', userId)
       .single();
 
-    const currentCoins = userData?.coins || 0;
-    const updatedCoins = currentCoins - mockPriceOfPack;
-    if (updatedCoins <= 0) {
-      //some pupup when time;
+    if (userData.coins <= 0) {
       console.log('NO CONIS LEFT!!!');
       return;
     }
 
-    setCoins(updatedCoins);
-
     const rarityTypeNumber = Math.floor(Math.random() * 100) + 1;
     let rarityString = 'Common';
-
-    console.log('Das istr die rarity : ', rarityTypeNumber);
 
     for (const [word, number] of Object.entries(rarityDict)) {
       if (rarityTypeNumber <= number) {
@@ -71,8 +61,6 @@ export default function SinglePack() {
         break;
       }
     }
-
-    console.log('Das istr die rarity : ', rarityString);
 
     const { data: allCardsWithRarity } = await supabase
       .from(currentTypetoOpen)
@@ -86,7 +74,6 @@ export default function SinglePack() {
     }
 
     const randomIndex = Math.floor(Math.random() * allCardsWithRarity.length);
-    console.log('random number', randomIndex);
 
     const { data } = await supabase
       .from(currentTypetoOpen)
@@ -94,27 +81,20 @@ export default function SinglePack() {
       .eq('id', allCardsWithRarity[randomIndex].id)
       .single();
 
-    setCardPrice(mockPriceOfPack);
     setCardId(data.id);
 
-    const onError = await supabase
-      .from('user_collection')
-      .update({ coins: updatedCoins })
-      .eq('id', mockUserID);
-
+    updateUserCoins(userData.id, mockPriceOfPack);
     setImageUrl(getImageUrl(data.png_id, currentTypetoOpen));
     setterIsOpened(true);
   };
 
   const addToInventory = async () => {
-    let mockUserID = userId;
-
-    const templateID = await createCardInstance(cardId, mockUserID, currentTypetoOpen);
+    const templateID = await createCardInstance(cardId, userId, currentTypetoOpen);
 
     const { data: user } = await supabase
       .from('user_collection')
       .select('inventory')
-      .eq('id', mockUserID)
+      .eq('id', userId)
       .single();
     const newItem = currentTypetoOpen + ',' + templateID + ',' + cardId;
     console.log(newItem);
@@ -122,18 +102,17 @@ export default function SinglePack() {
     const onError = await supabase
       .from('user_collection')
       .update({ inventory: newArray })
-      .eq('id', mockUserID)
+      .eq('id', userId)
       .single();
 
     setterIsOpened(false);
   };
 
   const quickSell = async () => {
-    const mockUserID = 1;
     const onError = await supabase
       .from('user_collection')
       .update({ coins: coins + cardPrice })
-      .eq('id', mockUserID);
+      .eq('id', userId);
     setterIsOpened(false);
   };
 

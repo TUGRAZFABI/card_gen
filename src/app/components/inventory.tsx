@@ -103,7 +103,6 @@ export default function Inventory() {
       .single();
     for (let i = 0; i < user.inventory.length; i++) {
       const [className, tewmplateID, idString] = user.inventory[i].split(',');
-      console.log('name and class', className, idString);
 
       if (className == cardToSell.class && idString == cardToSell.id) {
         const updatedInventory = [...user.inventory];
@@ -113,10 +112,8 @@ export default function Inventory() {
           .from('user_collection')
           .update({ inventory: updatedInventory })
           .eq('id', userId || 1);
-        console.log('Final index to delete: ', indexToDelete);
         break;
       }
-      console.log('index to delete: ', indexToDelete);
 
       indexToDelete++;
     }
